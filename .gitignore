@@ -1,0 +1,50 @@
+# Bytecode de Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Entornos virtuales
+.venv/
+env/
+venv/
+
+# Archivos de configuración de IDEs (puedes descomentarlos si usas alguno de estos)
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Archivos de Docker (si no deseas compartir estos archivos específicos de configuración)
+docker-compose.override.yml
+
+# Archivos de pytest
+*.cover
+*.hypothesis/
+*.pytest_cache/
+
+# Archivos de logs
+*.log
+
+# Directorios de volúmenes de Docker
+postgres_data/
+
+# Archivos de configuración de pip
+Pipfile.lock
+
+# Archivos generados por el sistema operativo
+.DS_Store
+Thumbs.db
+
+# Archivos generados por test runners
+nosetests.xml
+coverage.xml
+*.cover
+*.hypothesis/
+
+# Archivos de entorno de producción
+*.env
+
+# Otros archivos temporales
+*.bak
+*.swp

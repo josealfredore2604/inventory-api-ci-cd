@@ -1,0 +1,56 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Create .env file
+        run: |
+          cat > .env << EOF
+          POSTGRES_USER=dbuser
+          POSTGRES_PASSWORD=dbpass
+          POSTGRES_DB=inventory
+          POSTGRES_HOST=db
+          POSTGRES_PORT=5432
+          DATABASE_URL=postgresql://dbuser:dbpass@db:5432/inventory
+          FLASK_ENV=test
+          FLASK_DEBUG=False
+          EOF
+
+      - name: Build and start services
+        run: |
+          docker compose up -d --build
+
+      - name: Wait for services to be healthy
+        run: |
+          timeout 60 bash -c 'until docker compose ps | grep -q "healthy"; do sleep 2; done'
+
+      - name: Check services status
+        run: |
+          docker compose ps
+
+      - name: Run tests
+        run: |
+          docker compose exec -T app pytest tests -v
+
+      - name: Show logs on failure
+        if: failure()
+        run: |
+          docker compose logs
+
+      - name: Cleanup
+        if: always()
+        run: |
+          docker compose down -v
